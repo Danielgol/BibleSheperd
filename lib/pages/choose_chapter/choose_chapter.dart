@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/chapter/chapter.dart';
@@ -6,14 +6,28 @@ import 'package:flutter_application/pages/models/models.dart';
 
 class ChooseChapterPage extends StatelessWidget {
   final Livro livro;
+  final String connection;
 
-  ChooseChapterPage({required this.livro});
+  ChooseChapterPage({super.key, required this.livro, required this.connection});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(livro.nome),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(livro.nome),
+            if (connection != '')
+              IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  // Ação ao pressionar o botão X
+                 _showConfirmationDialog(context);
+                },
+              ),
+            ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -36,7 +50,7 @@ class ChooseChapterPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ChapterPage(livro: livro.nome, capitulo: index+1),
+                    builder: (context) => ChapterPage(livro: livro.nome, capitulo: index+1, connection: connection),
                   ),
                 );
               },
@@ -47,4 +61,34 @@ class ChooseChapterPage extends StatelessWidget {
       ),
     );
   }
+
+  void _showConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('You are leaving!'),
+          content: Text('Would you like to leave the room?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }

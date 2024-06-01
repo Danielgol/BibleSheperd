@@ -1,5 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/home/home.dart';
+import 'package:flutter_application/pages/share/share.dart';
 
 
 class App extends StatelessWidget {
@@ -8,7 +11,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: HomePage()
+      home: HomePage(),
     );
   }
 }

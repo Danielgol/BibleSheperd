@@ -7,7 +7,6 @@ import 'package:flutter_application/pages/choose_chapter/choose_chapter.dart';
 class ChooseBookPage extends StatelessWidget {
 
   final String connection;
-
   const ChooseBookPage({super.key, required this.connection});
   
   @override
@@ -15,14 +14,19 @@ class ChooseBookPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Livros da Bíblia'),
+            if (connection != '')
+              Text('Room Code: $connection')
+            else
+              Text('Bible Shepherd'),
+
             if (connection != '')
               IconButton(
                 icon: Icon(Icons.close),
                 onPressed: () {
                   // Ação ao pressionar o botão X
-                  Navigator.pop(context);
+                  _showConfirmationDialog(context);
                 },
               ),
             ],
@@ -75,7 +79,7 @@ class ChooseBookPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChooseChapterPage(livro: livro),
+                      builder: (context) => ChooseChapterPage(livro: livro, connection: connection),
                     ),
                   );
                 },
@@ -87,4 +91,33 @@ class ChooseBookPage extends StatelessWidget {
       ),
     );
   }
+
+  void _showConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('You are leaving!'),
+          content: Text('Would you like to leave the room?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  
 }

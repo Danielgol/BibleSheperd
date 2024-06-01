@@ -27,37 +27,49 @@ class HomePage extends StatelessWidget {
               //   height: 150,
               // ),
               SizedBox(height: 50),
-              ElevatedButton(
-                onPressed: () {
-                  // Ação para o botão "Share"
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SharePage()),
-                  );
-                },
-                child: Text('Share'),
+              SizedBox(
+                width: 200.0,
+                height: 60.0,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Ação para o botão "Follow"
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SharePage()),
+                    );
+                  },
+                  child: Text('Share'),
+                ),
               ),
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Ação para o botão "Follow"
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => FollowPage()),
-                  );
-                },
-                child: Text('Follow'),
+              SizedBox(
+                width: 200.0,
+                height: 60.0,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Ação para o botão "Follow"
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FollowPage()),
+                    );
+                  },
+                  child: Text('Follow'),
+                ),
               ),
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Ação para o botão "Read"
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ChooseBookPage(connection: '')),
-                  );
-                },
-                child: Text('Read'),
+              SizedBox(
+                width: 200.0,
+                height: 60.0,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Ação para o botão "Follow"
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChooseBookPage(connection: '')),
+                    );
+                  },
+                  child: Text('Read'),
+                ),
               ),
             ],
           ),
