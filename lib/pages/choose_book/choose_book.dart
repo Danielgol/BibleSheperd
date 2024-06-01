@@ -1,17 +1,32 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/models/models.dart';
 import 'package:flutter_application/pages/choose_chapter/choose_chapter.dart';
 
 class ChooseBookPage extends StatelessWidget {
-  const ChooseBookPage({super.key});
+
+  final String connection;
+
+  const ChooseBookPage({super.key, required this.connection});
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Livros da Bíblia'),
+        title: Row(
+          children: [
+            Text('Livros da Bíblia'),
+            if (connection != '')
+              IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  // Ação ao pressionar o botão X
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+        ),
       ),
       body: ListView(
         children: [

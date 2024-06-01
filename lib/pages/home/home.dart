@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/choose_book/choose_book.dart';
 import 'package:flutter_application/pages/follow/follow.dart';
@@ -52,7 +54,7 @@ class HomePage extends StatelessWidget {
                   // Ação para o botão "Read"
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ChooseBookPage()),
+                    MaterialPageRoute(builder: (context) => ChooseBookPage(connection: '')),
                   );
                 },
                 child: Text('Read'),
