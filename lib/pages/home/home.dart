@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
                 height: 60.0,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Ação para o botão "Follow"
+                    // Ação para o botão "Share"
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SharePage()),
@@ -62,10 +62,10 @@ class HomePage extends StatelessWidget {
                 height: 60.0,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Ação para o botão "Follow"
+                    // Ação para o botão "Read"
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ChooseBookPage(connection: '')),
+                      MaterialPageRoute(builder: (context) => ChooseBookPage(code: '')),
                     );
                   },
                   child: Text('Read'),

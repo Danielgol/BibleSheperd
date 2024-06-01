@@ -1,14 +1,16 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, unused_local_variable
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application/pages/chapter/chapter.dart';
+import 'package:flutter_application/pages/read/read.dart';
 import 'package:flutter_application/pages/models/models.dart';
+import 'package:flutter_application/pages/socket_service.dart';
+import 'package:provider/provider.dart';
 
 class ChooseChapterPage extends StatelessWidget {
   final Livro livro;
-  final String connection;
+  final String code;
 
-  ChooseChapterPage({super.key, required this.livro, required this.connection});
+  ChooseChapterPage({super.key, required this.livro, required this.code});
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +19,9 @@ class ChooseChapterPage extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(livro.nome),
-            if (connection != '')
+            
+            if (code != '')...{
+              Text('${livro.nome}: $code'),
               IconButton(
                 icon: Icon(Icons.close),
                 onPressed: () {
@@ -26,6 +29,9 @@ class ChooseChapterPage extends StatelessWidget {
                  _showConfirmationDialog(context);
                 },
               ),
+            }else...{
+              Text(livro.nome),
+            }
             ],
         ),
       ),
@@ -47,10 +53,14 @@ class ChooseChapterPage extends StatelessWidget {
                 ),
               ),
               onPressed: () {
+                if(code != ''){
+                  final socketService = Provider.of<SocketService>(context, listen: false);
+                  socketService.getSocket().emit('choose_reference', {'roomCode': code, 'book': livro.nome, 'chapter': index+1});
+                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ChapterPage(livro: livro.nome, capitulo: index+1, connection: connection),
+                    builder: (context) => ReadPage(livro: livro.nome, capitulo: index+1, code: code),
                   ),
                 );
               },

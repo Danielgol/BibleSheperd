@@ -1,9 +1,12 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api
 
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_application/pages/models/models.dart';
+import 'package:flutter_application/pages/socket_service.dart';
+import 'package:provider/provider.dart';
 
 
 Future<List<Versiculo>> carregarVersiculos() async {
@@ -12,18 +15,44 @@ Future<List<Versiculo>> carregarVersiculos() async {
   return data.map((json) => Versiculo.fromJson(json)).toList();
 }
 
-class ChapterPage extends StatelessWidget {
+
+
+
+class ReadPage extends StatefulWidget {
   final String livro;
   final int capitulo;
-  final String connection;
+  final String code;
+  ReadPage({super.key, required this.livro, required this.capitulo, required this.code});
+  
+  @override
+  _SocketListenerPageState createState() => _SocketListenerPageState();
+}
 
-  ChapterPage({super.key, required this.livro, required this.capitulo, required this.connection});
+class _SocketListenerPageState extends State<ReadPage> {
 
-  Future<List<Versiculo>> carregarVersiculosDoCapitulo() async {
+  late String livro = '';
+  late int capitulo = 0;
+  
+  Future<List<Versiculo>> carregarVersiculosDoCapitulo(livro, capitulo) async {
     List<Versiculo> todosVersiculos = await carregarVersiculos();
     return todosVersiculos
         .where((versiculo) => versiculo.book == livro && versiculo.chapter == capitulo)
         .toList();
+  }
+
+  @override
+  void initState() {
+    // Configuração do socket
+    livro = widget.livro;
+    capitulo = widget.capitulo;
+    final socketService = Provider.of<SocketService>(context, listen: false);
+    if(widget.code != '') {
+      if (socketService.reference != {}){
+        livro = socketService.reference['book'];
+        capitulo = socketService.reference['chapter'];
+      }
+    }
+    super.initState();
   }
 
   @override
@@ -33,8 +62,9 @@ class ChapterPage extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('$livro $capitulo'),
-            if (connection != '')
+            
+            if (widget.code != '')...{
+              Text('$livro $capitulo: ${widget.code}'),
               IconButton(
                 icon: Icon(Icons.close),
                 onPressed: () {
@@ -42,11 +72,13 @@ class ChapterPage extends StatelessWidget {
                   _showConfirmationDialog(context);
                 },
               ),
+            }else
+              Text('$livro $capitulo'),
             ],
         ),
       ),
       body: FutureBuilder<List<Versiculo>>(
-        future: carregarVersiculosDoCapitulo(),
+        future: carregarVersiculosDoCapitulo(livro, capitulo),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());

@@ -6,8 +6,8 @@ import 'package:flutter_application/pages/choose_chapter/choose_chapter.dart';
 
 class ChooseBookPage extends StatelessWidget {
 
-  final String connection;
-  const ChooseBookPage({super.key, required this.connection});
+  final String code;
+  const ChooseBookPage({super.key, required this.code});
   
   @override
   Widget build(BuildContext context) {
@@ -16,12 +16,12 @@ class ChooseBookPage extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (connection != '')
-              Text('Room Code: $connection')
+            if (code != '')
+              Text('Room Code: $code')
             else
               Text('Bible Shepherd'),
 
-            if (connection != '')
+            if (code != '')
               IconButton(
                 icon: Icon(Icons.close),
                 onPressed: () {
@@ -79,7 +79,7 @@ class ChooseBookPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChooseChapterPage(livro: livro, connection: connection),
+                      builder: (context) => ChooseChapterPage(livro: livro, code: code),
                     ),
                   );
                 },

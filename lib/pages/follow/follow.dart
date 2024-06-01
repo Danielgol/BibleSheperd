@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application/pages/read/read.dart';
 
 class FollowPage extends StatelessWidget {
   const FollowPage({super.key});
@@ -33,6 +34,12 @@ class FollowPage extends StatelessWidget {
               onPressed: () {
                 // Ação para o botão "Criar"
                 // Adicione aqui a lógica para criar a sala
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReadPage(livro: '', capitulo: 0, code: 'sala'),
+                  ),
+                );
               },
               child: Text('Follow'),
             ),
