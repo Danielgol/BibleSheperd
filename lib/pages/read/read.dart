@@ -10,13 +10,16 @@ import 'package:flutter_application/pages/socket_service/socket_service.dart';
 
 
 class ReadPage extends StatefulWidget {
-  String livro = "---";
-  int capitulo = 1000;
-  String code = "sala";
+  String livro = "";
+  int capitulo = 0;
+  String code = "";
   ReadPage({super.key, required this.livro, required this.capitulo, required this.code});
+  
   @override
   _ReadViewState createState() => _ReadViewState();
 }
+
+
 
 
 class _ReadViewState extends State<ReadPage> with ReadController {
@@ -40,23 +43,21 @@ class _ReadViewState extends State<ReadPage> with ReadController {
       super.setState(fn);
     }
   }
-  
 
   @override
   void initState() {
-
-    // if (widget.code != '')
-
-    SocketService.instance.webSocketSender('get_reference', widget.code);
-
-    // listen update channel
-    listenMessageEvent(() {
-      Future.delayed(Duration.zero, () async {
-        setState(() {
-        });
+    if (widget.code == ''){
+      livro = widget.livro;
+      capitulo = widget.capitulo;
+    }else{
+      SocketService.instance.webSocketSender('get_reference', widget.code);
+      // listen update channel
+      listenMessageEvent((){
+        //Future.delayed(Duration.zero, () async {
+        setState(() {});
+        //});
       });
-    });
-
+    }
     super.initState();
   }
 
@@ -65,28 +66,37 @@ class _ReadViewState extends State<ReadPage> with ReadController {
   Widget build(BuildContext context) {
 
     return Scaffold(
-
-      // body: Center(
-      //   child: Text('Reference Data: ${widget.code} ${livro} ${capitulo}')
-      // ),
-
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            
-            if (widget.code != '')...{
-              Text('$livro $capitulo: ${widget.code}'),
-              IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () {
-                  // Ação ao pressionar o botão X
-                  _showConfirmationDialog(context);
+
+            if (widget.code != '')... {
+              if (livro == '' || capitulo == 0)... {
+                Text('Aguardando Capítulo...'),
+              }else
+                Text('$livro $capitulo'),
+
+              TextButton.icon(
+                style: TextButton.styleFrom(
+                  textStyle: TextStyle(color: Colors.blue),
+                  backgroundColor: Colors.white,
+                  shape:RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24.0),
+                  ),
+                ),
+                onPressed: () => {
+                  // botão X
+                  _showConfirmationDialog(context)
                 },
+                label: Text(widget.code),
+                icon: Icon(Icons.close),
               ),
-            }else
+            } else... {
               Text('$livro $capitulo'),
-            ],
+            }
+              
+          ],
         ),
       ),
       body: FutureBuilder<List<Versiculo>>(
@@ -110,7 +120,7 @@ class _ReadViewState extends State<ReadPage> with ReadController {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: '${versiculo.verse} ',
+                          text: '${versiculo.verse}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
@@ -166,5 +176,4 @@ class _ReadViewState extends State<ReadPage> with ReadController {
       },
     );
   }
-
 }

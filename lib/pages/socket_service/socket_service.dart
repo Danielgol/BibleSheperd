@@ -3,6 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+// https://medium.com/@ocakirsaz/real-time-chat-app-with-websocket-flutter-nestjs-65ec6429066a
 
 final class SocketService {
 
@@ -55,45 +56,3 @@ final class SocketService {
   }
   
 }
-
-
-
-
-
-// class SocketServiceT with ChangeNotifier {
-
-//   late IO.Socket socket;
-//   Map? reference;
-
-//   SocketService() {
-//     socket = IO.io('http://10.0.0.111:3000', IO.OptionBuilder().setTransports(['websocket']).build());
-
-//     socket.onConnect((_) {
-//       print('Connected to server');
-//     });
-
-//     socket.onDisconnect((_) => print('Disconnected from server'));
-
-//     // socket.on('reference', (data) {
-//     //   print(data);
-//     //   reference = data;
-//     // });
-//   }
-
-//   bool get isConnected => socket.connected;
-  
-//   IO.Socket getSocket() {
-//     return socket;
-//   }
-
-//   @override
-//   void dispose() {
-//     socket.dispose();
-//     super.dispose();
-//   }
-
-//   void getReferenceFromCode(code) {
-//     socket.emit('get_reference', code);
-//   }
-
-// }

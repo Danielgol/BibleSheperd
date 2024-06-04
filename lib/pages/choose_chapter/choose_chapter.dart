@@ -20,17 +20,27 @@ class ChooseChapterPage extends StatelessWidget {
           children: [
             
             if (code != '')...{
-              Text('${livro.nome}: $code'),
-              IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () {
-                  // Ação ao pressionar o botão X
-                 _showConfirmationDialog(context);
-                },
-              ),
+              Text(livro.nome),
+              if (code != '')
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                    textStyle: TextStyle(color: Colors.blue),
+                    backgroundColor: Colors.white,
+                    shape:RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24.0),
+                    ),
+                  ),
+                  onPressed: () => {
+                    // botão X
+                    _showConfirmationDialog(context)
+                  },
+                  label: Text(code),
+                  icon: Icon(Icons.close),
+                ),
             }else...{
               Text(livro.nome),
             }
+
             ],
         ),
       ),

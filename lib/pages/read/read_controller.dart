@@ -1,12 +1,11 @@
 
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/socket_service/socket_service.dart';
 
 mixin class ReadController {
 
-  String livro = 'oupa';
+  String livro = '';
   int capitulo = 0;
   //final TextEditingController msgController = TextEditingController();
 

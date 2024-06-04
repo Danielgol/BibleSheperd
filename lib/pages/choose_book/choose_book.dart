@@ -16,19 +16,25 @@ class ChooseBookPage extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (code != '')
-              Text('Room Code: $code')
-            else
-              Text('Bible Shepherd'),
 
+            Text('Bible Shepherd'),
             if (code != '')
-              IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () {
-                  // Ação ao pressionar o botão X
-                  _showConfirmationDialog(context);
+              TextButton.icon(
+                style: TextButton.styleFrom(
+                  textStyle: TextStyle(color: Colors.blue),
+                  backgroundColor: Colors.white,
+                  shape:RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24.0),
+                  ),
+                ),
+                onPressed: () => {
+                  // botão X
+                  _showConfirmationDialog(context)
                 },
+                label: Text(code),
+                icon: Icon(Icons.close),
               ),
+              
             ],
         ),
       ),
