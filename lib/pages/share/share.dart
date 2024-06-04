@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/choose_book/choose_book.dart';
-import 'package:flutter_application/pages/socket_service.dart';
+import 'package:flutter_application/pages/socket_service/socket_service.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:provider/provider.dart';
 
@@ -16,8 +16,8 @@ class _ChooseChapterScreenState extends State<SharePage> {
   late IO.Socket socket;
 
   void connectToServer() {
-    final socketService = Provider.of<SocketService>(context, listen: false);
-    socketService.getSocket().emit('create_room', 'sala');
+    SocketService.instance.initializeSocketConnection();
+    SocketService.instance.webSocketSender('create_room', 'sala');
   }
 
   @override

@@ -1,37 +1,31 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, must_be_immutable
 
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_application/pages/models/models.dart';
-import 'package:flutter_application/pages/socket_service.dart';
-import 'package:provider/provider.dart';
-
-
-Future<List<Versiculo>> carregarVersiculos() async {
-  final String response = await rootBundle.loadString('assets/kjv.json');
-  final List<dynamic> data = jsonDecode(response);
-  return data.map((json) => Versiculo.fromJson(json)).toList();
-}
-
-
+import 'package:flutter_application/pages/read/read_controller.dart';
+import 'package:flutter_application/pages/socket_service/socket_service.dart';
 
 
 class ReadPage extends StatefulWidget {
-  final String livro;
-  final int capitulo;
-  final String code;
+  String livro = "---";
+  int capitulo = 1000;
+  String code = "sala";
   ReadPage({super.key, required this.livro, required this.capitulo, required this.code});
-  
   @override
-  _SocketListenerPageState createState() => _SocketListenerPageState();
+  _ReadViewState createState() => _ReadViewState();
 }
 
-class _SocketListenerPageState extends State<ReadPage> {
 
-  late String livro = '';
-  late int capitulo = 0;
+class _ReadViewState extends State<ReadPage> with ReadController {
+
+  Future<List<Versiculo>> carregarVersiculos() async {
+    final String response = await rootBundle.loadString('assets/kjv.json');
+    final List<dynamic> data = jsonDecode(response);
+    return data.map((json) => Versiculo.fromJson(json)).toList();
+  }
   
   Future<List<Versiculo>> carregarVersiculosDoCapitulo(livro, capitulo) async {
     List<Versiculo> todosVersiculos = await carregarVersiculos();
@@ -41,23 +35,41 @@ class _SocketListenerPageState extends State<ReadPage> {
   }
 
   @override
-  void initState() {
-    // Configuração do socket
-    livro = widget.livro;
-    capitulo = widget.capitulo;
-    final socketService = Provider.of<SocketService>(context, listen: false);
-    if(widget.code != '') {
-      if (socketService.reference != {}){
-        livro = socketService.reference['book'];
-        capitulo = socketService.reference['chapter'];
-      }
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
     }
+  }
+  
+
+  @override
+  void initState() {
+
+    // if (widget.code != '')
+
+    SocketService.instance.webSocketSender('get_reference', widget.code);
+
+    // listen update channel
+    listenMessageEvent(() {
+      Future.delayed(Duration.zero, () async {
+        setState(() {
+        });
+      });
+    });
+
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+
+      // body: Center(
+      //   child: Text('Reference Data: ${widget.code} ${livro} ${capitulo}')
+      // ),
+
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

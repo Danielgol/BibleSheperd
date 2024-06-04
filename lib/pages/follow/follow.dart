@@ -2,9 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/read/read.dart';
+import 'package:flutter_application/pages/socket_service/socket_service.dart';
 
 class FollowPage extends StatelessWidget {
   const FollowPage({super.key});
+
+  void connectToServer() {
+    SocketService.instance.initializeSocketConnection();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +39,7 @@ class FollowPage extends StatelessWidget {
               onPressed: () {
                 // Ação para o botão "Criar"
                 // Adicione aqui a lógica para criar a sala
+                connectToServer();
                 Navigator.push(
                   context,
                   MaterialPageRoute(

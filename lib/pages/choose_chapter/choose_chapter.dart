@@ -3,8 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/read/read.dart';
 import 'package:flutter_application/pages/models/models.dart';
-import 'package:flutter_application/pages/socket_service.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_application/pages/socket_service/socket_service.dart';
 
 class ChooseChapterPage extends StatelessWidget {
   final Livro livro;
@@ -53,9 +52,10 @@ class ChooseChapterPage extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                if(code != ''){
-                  final socketService = Provider.of<SocketService>(context, listen: false);
-                  socketService.getSocket().emit('choose_reference', {'roomCode': code, 'book': livro.nome, 'chapter': index+1});
+                if(code != '') {
+                  SocketService.instance.webSocketSender('set_reference',
+                    {'roomCode': code, 'book': livro.nome, 'chapter': index+1}
+                  );
                 }
                 Navigator.push(
                   context,
