@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application/pages/colors/colors.dart';
 import 'package:flutter_application/pages/read/read.dart';
 import 'package:flutter_application/pages/socket_service/socket_service.dart';
 
@@ -14,7 +15,9 @@ class FollowPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: actual_theme,
       appBar: AppBar(
+        backgroundColor: actual_theme,
         title: Text('Follow Room'),
       ),
       body: Padding(

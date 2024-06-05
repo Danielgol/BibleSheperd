@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/choose_book/choose_book.dart';
+import 'package:flutter_application/pages/colors/colors.dart';
 import 'package:flutter_application/pages/socket_service/socket_service.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:provider/provider.dart';
 
 class SharePage extends StatefulWidget {
   SharePage({super.key});
@@ -24,8 +24,10 @@ class _ChooseChapterScreenState extends State<SharePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: actual_theme,
         title: Text('Create Room'),
       ),
+      backgroundColor: actual_theme,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

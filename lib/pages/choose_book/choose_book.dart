@@ -1,8 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_to_list_in_spreads
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application/pages/colors/colors.dart';
 import 'package:flutter_application/pages/models/models.dart';
 import 'package:flutter_application/pages/choose_chapter/choose_chapter.dart';
+import 'package:flutter_application/pages/socket_service/socket_service.dart';
 
 class ChooseBookPage extends StatelessWidget {
 
@@ -12,11 +14,12 @@ class ChooseBookPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: actual_theme,
       appBar: AppBar(
+        backgroundColor: actual_theme,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-
             Text('Bible Shepherd'),
             if (code != '')
               TextButton.icon(
@@ -34,14 +37,13 @@ class ChooseBookPage extends StatelessWidget {
                 label: Text(code),
                 icon: Icon(Icons.close),
               ),
-              
             ],
         ),
       ),
       body: ListView(
         children: [
-          buildTestamentoSection('Antigo Testamento', antigoTestamento, context),
-          buildTestamentoSection('Novo Testamento', novoTestamento, context),
+          buildTestamentoSection('Old Testament', antigoTestamento, context),
+          buildTestamentoSection('New Testament', novoTestamento, context),
         ],
       ),
     );
@@ -59,7 +61,7 @@ class ChooseBookPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 52, 124, 92),
+                color: Color.fromARGB(255, 52, 69, 84),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
@@ -90,7 +92,6 @@ class ChooseBookPage extends StatelessWidget {
                   );
                 },
               );
-            // ignore: unnecessary_to_list_in_spreads
             }).toList(),
           ],
         ),
@@ -115,9 +116,11 @@ class ChooseBookPage extends StatelessWidget {
             TextButton(
               child: Text('Yes'),
               onPressed: () {
+                if(code != ''){
+                  SocketService.instance.disconnectFromSocket();
+                }
                 Navigator.of(context).pop();
-                Navigator.pop(context);
-                Navigator.pop(context);
+                Navigator.of(context).popUntil((route) => route.isFirst);
               },
             ),
           ],

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, unused_local_variable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application/pages/colors/colors.dart';
 import 'package:flutter_application/pages/read/read.dart';
 import 'package:flutter_application/pages/models/models.dart';
 import 'package:flutter_application/pages/socket_service/socket_service.dart';
@@ -14,7 +15,9 @@ class ChooseChapterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: actual_theme,
       appBar: AppBar(
+        backgroundColor: actual_theme,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -41,7 +44,7 @@ class ChooseChapterPage extends StatelessWidget {
               Text(livro.nome),
             }
 
-            ],
+          ],
         ),
       ),
       body: Padding(
@@ -99,10 +102,11 @@ class ChooseChapterPage extends StatelessWidget {
             TextButton(
               child: Text('Yes'),
               onPressed: () {
+                if (code != ''){
+                  SocketService.instance.disconnectFromSocket();
+                }
                 Navigator.of(context).pop();
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
+                Navigator.of(context).popUntil((route) => route.isFirst);
               },
             ),
           ],

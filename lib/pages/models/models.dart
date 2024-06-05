@@ -23,60 +23,56 @@ class Versiculo {
   }
 }
 
-class Reference {
-  String sender;
-  String roomCode;
-  String book;
-  int chapter;
+// class Reference {
+//   String sender;
+//   String roomCode;
+//   String book;
+//   int chapter;
 
-  Reference({
-    required this.sender,
-    required this.roomCode,
-    required this.book,
-    required this.chapter,
-  });
+//   Reference({
+//     required this.sender,
+//     required this.roomCode,
+//     required this.book,
+//     required this.chapter,
+//   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      'sender': sender,
-      'roomCode': sender,
-      'book': book,
-      'chapter': chapter,
-    };
-  }
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'sender': sender,
+//       'roomCode': sender,
+//       'book': book,
+//       'chapter': chapter,
+//     };
+//   }
 
-  factory Reference.fromJson(Map<String, dynamic> json) {
-    return Reference(
-      sender: json['sender'] as String,
-      roomCode: json['roomCode'] as String,
-      book: json['book'] as String,
-      chapter: json['chapter'] as int,
-    );
-  }
+//   factory Reference.fromJson(Map<String, dynamic> json) {
+//     return Reference(
+//       sender: json['sender'] as String,
+//       roomCode: json['roomCode'] as String,
+//       book: json['book'] as String,
+//       chapter: json['chapter'] as int,
+//     );
+//   }
 
-  @override
-  String toString() => "Reference(sender: $sender, roomCode: $roomCode, book: $book, chapter: $chapter)";
+//   @override
+//   String toString() => "Reference(sender: $sender, roomCode: $roomCode, book: $book, chapter: $chapter)";
 
-  @override
-  int get hashCode => Object.hash(sender, roomCode, book, chapter);
+//   @override
+//   int get hashCode => Object.hash(sender, roomCode, book, chapter);
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Reference &&
-          runtimeType == other.runtimeType &&
-          sender == other.sender &&
-          roomCode == other.roomCode &&
-          book == other.book &&
-          chapter == other.chapter;
-}
-
-
+//   @override
+//   bool operator ==(Object other) =>
+//       identical(this, other) ||
+//       other is Reference &&
+//           runtimeType == other.runtimeType &&
+//           sender == other.sender &&
+//           roomCode == other.roomCode &&
+//           book == other.book &&
+//           chapter == other.chapter;
+// }
 
 
-
-
-final List<Livro> antigoTestamento = [
+List<Livro> antigoTestamento = [
     Livro(nome: 'Genesis', capitulos: 50),
     Livro(nome: 'Exodus', capitulos: 40),
     Livro(nome: 'Leviticus', capitulos: 27),
@@ -118,7 +114,7 @@ final List<Livro> antigoTestamento = [
     Livro(nome: 'Malachi', capitulos: 4)
 ];
 
-final List<Livro> novoTestamento = [
+List<Livro> novoTestamento = [
     Livro(nome: 'Matthew', capitulos: 28),
     Livro(nome: 'Mark', capitulos: 16),
     Livro(nome: 'Luke', capitulos: 24),
@@ -147,3 +143,5 @@ final List<Livro> novoTestamento = [
     Livro(nome: 'Jude', capitulos: 1),
     Livro(nome: 'Revelation', capitulos: 22)
 ];
+
+List<Livro> bible = antigoTestamento + novoTestamento;
