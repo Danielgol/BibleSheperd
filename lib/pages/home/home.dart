@@ -7,9 +7,65 @@ import 'package:flutter_application/pages/follow/follow.dart';
 import 'package:flutter_application/pages/models/models.dart';
 import 'package:flutter_application/pages/share/share.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
 
-  const HomePage({super.key});
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin  {
+
+  bool _isExpanded = false;
+  late AnimationController _animationController;
+  late Animation<Offset> _whiteButtonAnimation;
+  late Animation<Offset> _blackButtonAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 250),
+    );
+
+    _whiteButtonAnimation = Tween<Offset>(
+      begin: Offset(0, 2),
+      end: Offset(0, 0),
+    ).animate(_animationController);
+
+    _blackButtonAnimation = Tween<Offset>(
+      begin: Offset(0, 1),
+      end: Offset(0, 0),
+    ).animate(_animationController);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _toggle() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+      if (_isExpanded) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    });
+  }
+
+  void _updateWhite() {
+    setState(() {
+      ActualTheme.actualTheme.white = true;
+    });
+  }
+
+  void _updateDark() {
+    setState(() {
+      ActualTheme.actualTheme.white = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +194,41 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
+
+      floatingActionButton: Stack(
+        children: [
+          Positioned(
+            right: 16,
+            bottom: 16,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SlideTransition(
+                  position: _whiteButtonAnimation,
+                  child: FloatingActionButton(
+                    onPressed: _updateWhite,
+                    backgroundColor: Colors.white,
+                    child: Icon(Icons.circle, color: Colors.black),
+                  ),
+                ),
+                SlideTransition(
+                  position: _blackButtonAnimation,
+                  child: FloatingActionButton(
+                    onPressed: _updateDark,
+                    backgroundColor: Colors.black,
+                    child: Icon(Icons.circle, color: Colors.white),
+                  ),
+                ),
+                FloatingActionButton(
+                  onPressed: _toggle,
+                  child: Icon(Icons.settings),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      
     );
   }
 }

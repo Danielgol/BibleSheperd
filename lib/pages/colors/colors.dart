@@ -37,7 +37,7 @@ Theme darkTheme = Theme(
 
 final class ActualTheme {
 
-  bool white = false;
+  bool white = true;
   Theme whitemode = whiteTheme;
   Theme darkmode = darkTheme;
 
