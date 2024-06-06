@@ -8,14 +8,16 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 final class SocketService {
 
   //Singleton pattern
+  static final String URL = "https://bshepherd-backend.onrender.com";
+  static final String PORT = "10000";
   static final SocketService instance = SocketService();
 
   String _fetchBaseUrl() {
     switch (kDebugMode) {
       case true:
-        return "http://10.0.0.111:3000"; //Debug host url
+        return URL; //Debug host url
       default:
-        return "http://10.0.0.111:3000"; //Product host url
+        return URL; //Product host url
     }
   }
 

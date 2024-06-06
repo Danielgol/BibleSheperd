@@ -103,8 +103,8 @@ class ChooseChapterPage extends StatelessWidget {
               child: Text(
                 '${index + 1}',
                 style: TextStyle(
+                  fontSize: 10,
                   color: ActualTheme.actualTheme.getTextColor(),
-                  fontSize: 20,
                   fontWeight: FontWeight.normal,
                 ),
               ),

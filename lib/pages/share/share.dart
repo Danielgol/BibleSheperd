@@ -21,7 +21,7 @@ class _ChooseChapterScreenState extends State<SharePage> {
 
   Future<bool> _checkRoomExists(String roomCode) async {
     var exists = true;
-    final response = await http.get(Uri.parse('http://10.0.0.111:3000/roomExists?roomCode=$roomCode'));
+    final response = await http.get(Uri.parse('${SocketService.URL}/roomExists?roomCode=$roomCode'));
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       exists = jsonResponse['result'];

@@ -14,10 +14,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin  {
 
-  bool _isExpanded = false;
-  late AnimationController _animationController;
-  late Animation<Offset> _whiteButtonAnimation;
-  late Animation<Offset> _blackButtonAnimation;
+  // bool _isExpanded = false;
+  // late AnimationController _animationController;
+  // late Animation<Offset> _whiteButtonAnimation;
+  // late Animation<Offset> _blackButtonAnimation;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   void dispose() {
-    _animationController.dispose();
+    //_animationController.dispose();
     super.dispose();
   }
 
