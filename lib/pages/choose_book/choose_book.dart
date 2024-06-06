@@ -15,18 +15,28 @@ class ChooseBookPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: actual_theme,
+      backgroundColor: ActualTheme.actualTheme.getPrimary(),
       appBar: AppBar(
-        backgroundColor: actual_theme,
+        backgroundColor: ActualTheme.actualTheme.getPrimary(),
+        iconTheme: IconThemeData(
+          color: ActualTheme.actualTheme.getTextColor(),
+        ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Bible Shepherd'),
+            Text(
+              'Bible Shepherd',
+              style: TextStyle(
+                color: ActualTheme.actualTheme.getTextColor(),
+                fontSize: 25,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
             if (userType == UserType.creator)
               TextButton.icon(
                 style: TextButton.styleFrom(
-                  textStyle: TextStyle(color: Colors.blue),
-                  backgroundColor: Colors.white,
+                  textStyle: TextStyle(color: ActualTheme.actualTheme.getTextColor()),
+                  backgroundColor: ActualTheme.actualTheme.getPrimSmooth(),
                   shape:RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24.0),
                   ),
@@ -35,8 +45,15 @@ class ChooseBookPage extends StatelessWidget {
                   // botão X
                   _showConfirmationDialog(context)
                 },
-                label: Text(roomCode),
-                icon: Icon(Icons.close),
+                label: Text(
+                  roomCode,
+                  style: TextStyle(
+                    color: ActualTheme.actualTheme.getTextColor(),
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                icon: Icon(Icons.close, color: ActualTheme.actualTheme.getTextColor()),
               ),
             ],
         ),
@@ -69,13 +86,14 @@ class ChooseBookPage extends StatelessWidget {
         child: Card(
           elevation: 4,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          color: ActualTheme.actualTheme.getTernary(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 52, 69, 84),
+                  color: ActualTheme.actualTheme.getSecondary(),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
@@ -84,7 +102,7 @@ class ChooseBookPage extends StatelessWidget {
                 child: Text(
                   titulo,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 241, 247, 251),
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -94,9 +112,9 @@ class ChooseBookPage extends StatelessWidget {
                 return ListTile(
                   title: Text(
                     livro.nome,
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, color: ActualTheme.actualTheme.getTextColor()),
                   ),
-                  trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 16, color: ActualTheme.actualTheme.getTextColor()),
                   onTap: () {
                     Navigator.push(
                       context,

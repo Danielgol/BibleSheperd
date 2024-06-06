@@ -52,19 +52,12 @@ class _ReadViewState extends State<ReadPage> with ReadController {
 
   @override
   Widget build(BuildContext context) {
-
-    
-
     return PopScope(
       canPop: false,
       onPopInvoked: ((didPop) {
         if(didPop){
           return;
         }
-        // if(widget.userType == UserType.follower && expulso == true){
-        //   Navigator.of(context).pop();
-        //   return;
-        // }
         if(widget.userType == UserType.follower){
           _showConfirmationDialog(context);
           return;
@@ -73,38 +66,90 @@ class _ReadViewState extends State<ReadPage> with ReadController {
         return;
       }),
       child: Scaffold(
-        backgroundColor: actual_theme,
+        backgroundColor: ActualTheme.actualTheme.getPrimary(),
         appBar: AppBar(
-          backgroundColor: actual_theme,
+          iconTheme: IconThemeData(
+            color: ActualTheme.actualTheme.getTextColor(), //change your color here
+          ),
+          backgroundColor: ActualTheme.actualTheme.getPrimary(),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               if (widget.userType == UserType.offline)... {
-                Text('$livro $capitulo'),
+                Text(
+                  '$livro $capitulo',
+                  style: TextStyle(
+                    color: ActualTheme.actualTheme.getTextColor(),
+                    fontSize: 20,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
               }else if(widget.userType == UserType.creator)...{
-                  Text('$livro $capitulo'),
-                  TextButton.icon(
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(color: Colors.blue),
-                      backgroundColor: Colors.white,
-                      shape:RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24.0),
-                      ),
+                Text(
+                  '$livro $capitulo',
+                  style: TextStyle(
+                    color: ActualTheme.actualTheme.getTextColor(),
+                    fontSize: 20,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                    textStyle: TextStyle(color: ActualTheme.actualTheme.getTextColor()),
+                    backgroundColor: ActualTheme.actualTheme.getPrimSmooth(),
+                    shape:RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24.0),
                     ),
+                  ),
                   onPressed: () => {
                     // botão X
                     _showConfirmationDialog(context)
                   },
-                  label: Text(widget.roomCode),
-                  icon: Icon(Icons.close),
+                  label: Text(
+                    widget.roomCode,
+                    style: TextStyle(
+                      color: ActualTheme.actualTheme.getTextColor(),
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  icon: Icon(Icons.close, color: ActualTheme.actualTheme.getTextColor()),
                 ),
               }else if(widget.userType == UserType.follower)...{
                 if (livro == '' || capitulo == 0)... {
-                  Text('Aguardando...'),
-                  Text(widget.roomCode),
+                  Text(
+                    "Aguardando...",
+                    style: TextStyle(
+                      color: ActualTheme.actualTheme.getTextColor(),
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  Text(
+                    widget.roomCode,
+                    style: TextStyle(
+                      color: ActualTheme.actualTheme.getTextColor(),
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
                 }else...{
-                  Text('$livro $capitulo'),
-                  Text(widget.roomCode),
+                  Text(
+                    '$livro $capitulo',
+                    style: TextStyle(
+                      color: ActualTheme.actualTheme.getTextColor(),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    widget.roomCode,
+                    style: TextStyle(
+                      color: ActualTheme.actualTheme.getTextColor(),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 }
               }
             ],
@@ -117,9 +162,13 @@ class _ReadViewState extends State<ReadPage> with ReadController {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Center(child: Text('Erro ao carregar versículos.'));
+              return Center(child: Text('Erro ao carregar versículos.', style: TextStyle(
+                      color: ActualTheme.actualTheme.getTextColor(),
+                    )));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('Nenhum versículo encontrado.'));
+              return Center(child: Text('Nenhum versículo encontrado.', style: TextStyle(
+                      color: ActualTheme.actualTheme.getTextColor(),
+                    )));
             } else {
               return Stack(
                 children: [
@@ -135,18 +184,18 @@ class _ReadViewState extends State<ReadPage> with ReadController {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: '${versiculo.verse}',
+                                  text: '${versiculo.verse} ',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                                    color: ActualTheme.actualTheme.getTextColor(),
                                     fontSize: 16,
                                   ),
                                 ),
                                 TextSpan(
                                   text: versiculo.text,
                                   style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
+                                    color: ActualTheme.actualTheme.getTextColor(),
+                                    fontSize: 20,
                                   ),
                                 ),
                               ],

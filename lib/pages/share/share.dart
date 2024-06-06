@@ -59,10 +59,19 @@ class _ChooseChapterScreenState extends State<SharePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: actual_theme,
-        title: Text('Create Room'),
+        backgroundColor: ActualTheme.actualTheme.getPrimary(),
+        iconTheme: IconThemeData(
+          color: ActualTheme.actualTheme.getTextColor(), //change your color here
+        ),
+        title: Text(
+            'Create Room',
+            style: TextStyle(
+              color: ActualTheme.actualTheme.getTextColor(),
+              fontWeight: FontWeight.normal,
+            ),
+          ),
       ),
-      backgroundColor: actual_theme,
+      backgroundColor: ActualTheme.actualTheme.getPrimary(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -71,30 +80,45 @@ class _ChooseChapterScreenState extends State<SharePage> {
           children: <Widget>[
             Text(
               'Create a room code:',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 18, color: ActualTheme.actualTheme.getTextColor()),
             ),
             SizedBox(height: 10),
             TextField(
               controller: _textController,
+              style: TextStyle(fontSize: 20, color: ActualTheme.actualTheme.getTextColor()),
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Type here',
+                hintText: "Type Here",
+                hintStyle: TextStyle(fontSize: 16, color: ActualTheme.actualTheme.getTextColor()),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ActualTheme.actualTheme.getSecondary(),
+              ),
               onPressed: () => {
                 //Adicione aqui a lógica para criar a sala
                 connectToServer(context),
               },
-              child: Text('Create'),
+              child: Text(
+                'Create',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 241, 247, 251),
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
             ),
             SizedBox(height: 20),
             if(errorMsg != "")...{
               Text(
                 errorMsg,
                 style: TextStyle(
-                  color: Color.fromARGB(255, 173, 35, 35),
+                  color: Color.fromARGB(255, 234, 65, 65),
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),

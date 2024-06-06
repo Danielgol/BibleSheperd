@@ -15,32 +15,56 @@ class ChooseChapterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: actual_theme,
+      backgroundColor: ActualTheme.actualTheme.getPrimary(),
       appBar: AppBar(
-        backgroundColor: actual_theme,
+        backgroundColor: ActualTheme.actualTheme.getPrimary(),
+        iconTheme: IconThemeData(
+          color: ActualTheme.actualTheme.getTextColor(),
+        ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-
             if (userType == UserType.creator)...{
-              Text(livro.nome),
-              TextButton.icon(
-                style: TextButton.styleFrom(
-                  textStyle: TextStyle(color: Colors.blue),
-                  backgroundColor: Colors.white,
-                  shape:RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24.0),
-                  ),
+              Text(
+                livro.nome,
+                style: TextStyle(
+                  color: ActualTheme.actualTheme.getTextColor(),
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
                 ),
-                onPressed: () => {
-                  // botão X
-                  _showConfirmationDialog(context)
-                },
-                label: Text(roomCode),
-                icon: Icon(Icons.close),
               ),
+              if (userType == UserType.creator)
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                    textStyle: TextStyle(color: ActualTheme.actualTheme.getTextColor()),
+                    backgroundColor: ActualTheme.actualTheme.getPrimSmooth(),
+                    shape:RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24.0),
+                    ),
+                  ),
+                  onPressed: () => {
+                    // botão X
+                    _showConfirmationDialog(context)
+                  },
+                  label: Text(
+                    roomCode,
+                    style: TextStyle(
+                      color: ActualTheme.actualTheme.getTextColor(),
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  icon: Icon(Icons.close, color: ActualTheme.actualTheme.getTextColor()),
+                ),
             }else...{
-              Text(livro.nome),
+              Text(
+                livro.nome,
+                style: TextStyle(
+                  color: ActualTheme.actualTheme.getTextColor(),
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
             }
           ],
         ),
@@ -61,6 +85,7 @@ class ChooseChapterPage extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0), // Bordas levemente arredondadas
                 ),
+                backgroundColor: ActualTheme.actualTheme.getTernary(),
               ),
               onPressed: () {
                 if(userType == UserType.creator) {
@@ -75,7 +100,14 @@ class ChooseChapterPage extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('${index + 1}'),
+              child: Text(
+                '${index + 1}',
+                style: TextStyle(
+                  color: ActualTheme.actualTheme.getTextColor(),
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
             );
           },
         ),

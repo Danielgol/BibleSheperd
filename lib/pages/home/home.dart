@@ -18,23 +18,31 @@ class HomePage extends StatelessWidget {
       //   backgroundColor: actual_theme,
       //   title: Text('Some'),
       // ),
-      backgroundColor: actual_theme,
+      backgroundColor: ActualTheme.actualTheme.getPrimary(),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset(
-                'assets/images/icon.png',
-                width: 80,
-                height: 80,
-              ),
+              if(ActualTheme.actualTheme.white)...{
+                Image.asset(
+                  'assets/images/icon.png',
+                  width: 80,
+                  height: 80,
+                ),
+              }else...{
+                Image.asset(
+                  'assets/images/icon_dark.png',
+                  width: 80,
+                  height: 80,
+                ),
+              },
               SizedBox(height: 20),
               Text(
                 "Bible Shepherd",
                 style: TextStyle(
-                  color: Colors.black,
+                  color: ActualTheme.actualTheme.getTextColor(),
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
@@ -55,7 +63,7 @@ class HomePage extends StatelessWidget {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
-                      const Color.fromARGB(255, 52, 69, 84)
+                      ActualTheme.actualTheme.getSecondary(),
                     ),
                   ),
                   onPressed: () {
@@ -81,7 +89,7 @@ class HomePage extends StatelessWidget {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
-                      const Color.fromARGB(255, 52, 69, 84)
+                      ActualTheme.actualTheme.getSecondary(),
                     ),
                   ),
                   onPressed: () {
@@ -107,7 +115,7 @@ class HomePage extends StatelessWidget {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
-                      const Color.fromARGB(255, 52, 69, 84)
+                      ActualTheme.actualTheme.getSecondary(),
                     ),
                   ),
                   onPressed: () {

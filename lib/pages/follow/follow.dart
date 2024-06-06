@@ -63,10 +63,19 @@ class _FollowPageScreenState extends State<FollowPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: actual_theme,
+      backgroundColor: ActualTheme.actualTheme.getPrimary(),
       appBar: AppBar(
-        backgroundColor: actual_theme,
-        title: Text('Follow Room'),
+        backgroundColor: ActualTheme.actualTheme.getPrimary(),
+        iconTheme: IconThemeData(
+          color: ActualTheme.actualTheme.getTextColor(), //change your color here
+        ),
+        title: Text(
+            'Follow Room',
+            style: TextStyle(
+              color: ActualTheme.actualTheme.getTextColor(),
+              fontWeight: FontWeight.normal,
+            ),
+          ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -76,30 +85,45 @@ class _FollowPageScreenState extends State<FollowPage> {
           children: <Widget>[
             Text(
               'Enter the room code:',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 18, color: ActualTheme.actualTheme.getTextColor()),
             ),
             SizedBox(height: 10),
             TextField(
               controller: _textController,
+              style: TextStyle(fontSize: 20, color: ActualTheme.actualTheme.getTextColor()),
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Type here',
+                hintText: "Type Here",
+                hintStyle: TextStyle(fontSize: 16, color: ActualTheme.actualTheme.getTextColor()),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ActualTheme.actualTheme.getSecondary(),
+              ),
               onPressed: () {
                 // Follow
                 connectToServer(context);
               },
-              child: Text('Follow'),
+              child: Text(
+                'Follow',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 241, 247, 251),
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
             ),
             SizedBox(height: 20),
             if(errorMsg != "")...{
               Text(
                 errorMsg,
                 style: TextStyle(
-                  color: Color.fromARGB(255, 173, 35, 35),
+                  color: Color.fromARGB(255, 234, 65, 65),
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
