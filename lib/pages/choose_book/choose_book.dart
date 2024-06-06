@@ -8,8 +8,9 @@ import 'package:flutter_application/pages/socket_service/socket_service.dart';
 
 class ChooseBookPage extends StatelessWidget {
 
-  final String code;
-  const ChooseBookPage({super.key, required this.code});
+  final String roomCode;
+  final UserType userType;
+  const ChooseBookPage({super.key, required this.roomCode, required this.userType});
   
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class ChooseBookPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Bible Shepherd'),
-            if (code != '')
+            if (userType == UserType.creator)
               TextButton.icon(
                 style: TextButton.styleFrom(
                   textStyle: TextStyle(color: Colors.blue),
@@ -34,7 +35,7 @@ class ChooseBookPage extends StatelessWidget {
                   // botão X
                   _showConfirmationDialog(context)
                 },
-                label: Text(code),
+                label: Text(roomCode),
                 icon: Icon(Icons.close),
               ),
             ],
@@ -50,52 +51,66 @@ class ChooseBookPage extends StatelessWidget {
   }
 
   Widget buildTestamentoSection(String titulo, List<Livro> livros, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 52, 69, 84),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: ((didPop) {
+        if(didPop){
+          return;
+        }
+        if(userType == UserType.creator){
+          _showConfirmationDialog(context);
+          return;
+        }
+        Navigator.of(context).pop();
+        return;
+      }),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 52, 69, 84),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                ),
+                child: Text(
+                  titulo,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              child: Text(
-                titulo,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            ...livros.map((livro) {
-              return ListTile(
-                title: Text(
-                  livro.nome,
-                  style: TextStyle(fontSize: 16),
-                ),
-                trailing: Icon(Icons.arrow_forward_ios, size: 16),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChooseChapterPage(livro: livro, code: code),
-                    ),
-                  );
-                },
-              );
-            }).toList(),
-          ],
+              ...livros.map((livro) {
+                return ListTile(
+                  title: Text(
+                    livro.nome,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChooseChapterPage(livro: livro, roomCode: roomCode, userType: userType),
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 
@@ -116,7 +131,7 @@ class ChooseBookPage extends StatelessWidget {
             TextButton(
               child: Text('Yes'),
               onPressed: () {
-                if(code != ''){
+                if(userType == UserType.creator){
                   SocketService.instance.disconnectFromSocket();
                 }
                 Navigator.of(context).pop();

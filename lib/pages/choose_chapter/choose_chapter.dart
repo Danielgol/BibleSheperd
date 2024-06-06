@@ -8,9 +8,9 @@ import 'package:flutter_application/pages/socket_service/socket_service.dart';
 
 class ChooseChapterPage extends StatelessWidget {
   final Livro livro;
-  final String code;
-
-  ChooseChapterPage({super.key, required this.livro, required this.code});
+  final String roomCode;
+  final UserType userType;
+  ChooseChapterPage({super.key, required this.livro, required this.roomCode, required this.userType});
 
   @override
   Widget build(BuildContext context) {
@@ -21,29 +21,27 @@ class ChooseChapterPage extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            
-            if (code != '')...{
+
+            if (userType == UserType.creator)...{
               Text(livro.nome),
-              if (code != '')
-                TextButton.icon(
-                  style: TextButton.styleFrom(
-                    textStyle: TextStyle(color: Colors.blue),
-                    backgroundColor: Colors.white,
-                    shape:RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24.0),
-                    ),
+              TextButton.icon(
+                style: TextButton.styleFrom(
+                  textStyle: TextStyle(color: Colors.blue),
+                  backgroundColor: Colors.white,
+                  shape:RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24.0),
                   ),
-                  onPressed: () => {
-                    // botão X
-                    _showConfirmationDialog(context)
-                  },
-                  label: Text(code),
-                  icon: Icon(Icons.close),
                 ),
+                onPressed: () => {
+                  // botão X
+                  _showConfirmationDialog(context)
+                },
+                label: Text(roomCode),
+                icon: Icon(Icons.close),
+              ),
             }else...{
               Text(livro.nome),
             }
-
           ],
         ),
       ),
@@ -65,15 +63,15 @@ class ChooseChapterPage extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                if(code != '') {
+                if(userType == UserType.creator) {
                   SocketService.instance.webSocketSender('set_reference',
-                    {'roomCode': code, 'book': livro.nome, 'chapter': index+1}
+                    {'roomCode': roomCode, 'book': livro.nome, 'chapter': index+1}
                   );
                 }
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ReadPage(livro: livro.nome, capitulo: index+1, code: code),
+                    builder: (context) => ReadPage(livro: livro.nome, capitulo: index+1, roomCode: roomCode, userType: userType),
                   ),
                 );
               },
@@ -102,7 +100,7 @@ class ChooseChapterPage extends StatelessWidget {
             TextButton(
               child: Text('Yes'),
               onPressed: () {
-                if (code != ''){
+                if (userType == UserType.creator){
                   SocketService.instance.disconnectFromSocket();
                 }
                 Navigator.of(context).pop();

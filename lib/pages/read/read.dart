@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, must_be_immutable
 
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/colors/colors.dart';
 import 'package:flutter_application/pages/models/models.dart';
@@ -11,14 +10,13 @@ import 'package:flutter_application/pages/socket_service/socket_service.dart';
 class ReadPage extends StatefulWidget {
   String livro = "";
   int capitulo = 0;
-  String code = "";
-  ReadPage({super.key, required this.livro, required this.capitulo, required this.code});
+  String roomCode = "";
+  UserType userType = UserType.offline;
+  ReadPage({super.key, required this.livro, required this.capitulo, required this.roomCode, required this.userType});
   
   @override
   _ReadViewState createState() => _ReadViewState();
 }
-
-
 
 class _ReadViewState extends State<ReadPage> with ReadController {
 
@@ -31,13 +29,22 @@ class _ReadViewState extends State<ReadPage> with ReadController {
 
   @override
   void initState() {
-    if (widget.code == ''){
+    if (widget.userType == UserType.offline){
       livro = widget.livro;
       capitulo = widget.capitulo;
     }else{
-      SocketService.instance.webSocketSender('get_reference', widget.code);
+      SocketService.instance.webSocketSender('get_reference', widget.roomCode);
       listenMessageEvent((){
         setState(() {});
+      });
+
+      SocketService.instance.webSocketReceiver('close_room', (data) {
+        setState(() {
+          SocketService.instance.disconnectFromSocket();
+          Navigator.of(context).pop();
+          Navigator.of(context).popUntil((route) => route.isFirst);
+          return _showRoomClosedDialog(context);
+        });
       });
     }
     super.initState();
@@ -45,129 +52,162 @@ class _ReadViewState extends State<ReadPage> with ReadController {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: actual_theme,
-      appBar: AppBar(
+
+    
+
+    return PopScope(
+      canPop: false,
+      onPopInvoked: ((didPop) {
+        if(didPop){
+          return;
+        }
+        // if(widget.userType == UserType.follower && expulso == true){
+        //   Navigator.of(context).pop();
+        //   return;
+        // }
+        if(widget.userType == UserType.follower){
+          _showConfirmationDialog(context);
+          return;
+        }
+        Navigator.of(context).pop();
+        return;
+      }),
+      child: Scaffold(
         backgroundColor: actual_theme,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (widget.code != '')... {
-              if (livro == '' || capitulo == 0)... {
-                Text('Aguardando...'),
-              }else
+        appBar: AppBar(
+          backgroundColor: actual_theme,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (widget.userType == UserType.offline)... {
                 Text('$livro $capitulo'),
-              TextButton.icon(
-                style: TextButton.styleFrom(
-                  textStyle: TextStyle(color: Colors.blue),
-                  backgroundColor: Colors.white,
-                  shape:RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24.0),
-                  ),
-                ),
-                onPressed: () => {
-                  // botão X
-                  _showConfirmationDialog(context)
-                },
-                label: Text(widget.code),
-                icon: Icon(Icons.close),
-              ),
-            } else... {
-              Text('$livro $capitulo'),
-            }
-          ],
-        ),
-      ),
-
-      body: FutureBuilder<List<Versiculo>>(
-        future: carregarVersiculosDoCapitulo(livro, capitulo),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Erro ao carregar versículos.'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Nenhum versículo encontrado.'));
-          } else {
-            return Stack(
-              children: [
-                ListView.builder(
-                  padding: EdgeInsets.all(16.0),
-                  itemCount: snapshot.data!.length+1,
-                  itemBuilder: (context, index) {
-                    if(index < snapshot.data!.length){
-                      final versiculo = snapshot.data![index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: .0),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: '${versiculo.verse}',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              TextSpan(
-                                text: versiculo.text,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }else{
-                      return SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.2, // 20% da altura da tela
-                      );
-                    }
+              }else if(widget.userType == UserType.creator)...{
+                  Text('$livro $capitulo'),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      textStyle: TextStyle(color: Colors.blue),
+                      backgroundColor: Colors.white,
+                      shape:RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24.0),
+                      ),
+                    ),
+                  onPressed: () => {
+                    // botão X
+                    _showConfirmationDialog(context)
                   },
+                  label: Text(widget.roomCode),
+                  icon: Icon(Icons.close),
                 ),
+              }else if(widget.userType == UserType.follower)...{
+                if (livro == '' || capitulo == 0)... {
+                  Text('Aguardando...'),
+                  Text(widget.roomCode),
+                }else...{
+                  Text('$livro $capitulo'),
+                  Text(widget.roomCode),
+                }
+              }
+            ],
+          ),
+        ),
 
-                Positioned(
-                  bottom: 20, // Distância do botão ao fundo da tela
-                  left: 20, // Distância do botão à esquerda da tela
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Adicione ação desejada
-                      goPreviousChapter(context);
+        body: FutureBuilder<List<Versiculo>>(
+          future: carregarVersiculosDoCapitulo(livro, capitulo),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Erro ao carregar versículos.'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Center(child: Text('Nenhum versículo encontrado.'));
+            } else {
+              return Stack(
+                children: [
+                  ListView.builder(
+                    padding: EdgeInsets.all(16.0),
+                    itemCount: snapshot.data!.length+1,
+                    itemBuilder: (context, index) {
+                      if(index < snapshot.data!.length){
+                        final versiculo = snapshot.data![index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: .0),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '${versiculo.verse}',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: versiculo.text,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }else{
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.2, // 20% da altura da tela
+                        );
+                      }
                     },
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                      const Color.fromARGB(255, 52, 69, 84)
-                    )),
-                    child: Icon(Icons.arrow_back, color: Colors.white),
                   ),
-                ),
 
-                Positioned(
-                  bottom: 20, // Distância do botão ao fundo da tela
-                  right: 20, // Distância do botão à direita da tela
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Adicione ação desejada
-                      goNextChapter(context);
-                    },
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                      const Color.fromARGB(255, 52, 69, 84)
-                    )),
-                    child: Icon(Icons.arrow_forward, color: Colors.white),
-                  ),
-                ),
-              ],
 
-            );
-          }
-        },
+                  if (widget.userType != UserType.follower)...{
+                    Positioned(
+                      bottom: 20, // Distância do botão ao fundo da tela
+                      left: 20, // Distância do botão à esquerda da tela
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Adicione ação desejada
+                          goPreviousChapter(context);
+                        },
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color.fromARGB(255, 52, 69, 84)
+                        )),
+                        child: Icon(Icons.arrow_back, color: Colors.white),
+                      ),
+                    ),
+
+                    Positioned(
+                      bottom: 20, // Distância do botão ao fundo da tela
+                      right: 20, // Distância do botão à direita da tela
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Adicione ação desejada
+                          goNextChapter(context);
+                        },
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color.fromARGB(255, 52, 69, 84)
+                        )),
+                        child: Icon(Icons.arrow_forward, color: Colors.white),
+                      ),
+                    ),
+                  }
+                ],
+              );
+            }
+          },
+        ),
       ),
     );
   }
+
+
+
+
+
 
   void goPreviousChapter(BuildContext context) {
     if(capitulo > 1){
@@ -187,10 +227,9 @@ class _ReadViewState extends State<ReadPage> with ReadController {
         setState(() {});
       }
     }
-
-    if(widget.code != ''){
+    if(widget.userType == UserType.creator){
       SocketService.instance.webSocketSender('set_reference',
-        {'roomCode': widget.code, 'book': livro, 'chapter': capitulo}
+        {'roomCode': widget.roomCode, 'book': livro, 'chapter': capitulo}
       );
     }
   }
@@ -211,10 +250,9 @@ class _ReadViewState extends State<ReadPage> with ReadController {
       capitulo = 1;
       setState(() {});
     }
-
-    if(widget.code != ''){
+    if(widget.userType == UserType.creator){
       SocketService.instance.webSocketSender('set_reference',
-        {'roomCode': widget.code, 'book': livro, 'chapter': capitulo}
+        {'roomCode': widget.roomCode, 'book': livro, 'chapter': capitulo}
       );
     }
   }
@@ -236,11 +274,28 @@ class _ReadViewState extends State<ReadPage> with ReadController {
             TextButton(
               child: Text('Yes'),
               onPressed: () {
-                if (widget.code != ''){
-                  SocketService.instance.disconnectFromSocket();
-                }
+                SocketService.instance.disconnectFromSocket();
                 Navigator.of(context).pop();
                 Navigator.of(context).popUntil((route) => route.isFirst);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showRoomClosedDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('This room was closed!'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
               },
             ),
           ],

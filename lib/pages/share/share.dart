@@ -1,23 +1,58 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, unused_local_variable
+// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_application/pages/choose_book/choose_book.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_application/pages/colors/colors.dart';
+import 'package:flutter_application/pages/models/models.dart';
+import 'package:flutter_application/pages/choose_book/choose_book.dart';
 import 'package:flutter_application/pages/socket_service/socket_service.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SharePage extends StatefulWidget {
-  SharePage({super.key});
+  const SharePage({super.key});
   @override
   _ChooseChapterScreenState createState() => _ChooseChapterScreenState();
 }
 
 class _ChooseChapterScreenState extends State<SharePage> {
-  late IO.Socket socket;
 
-  void connectToServer() {
-    SocketService.instance.initializeSocketConnection();
-    SocketService.instance.webSocketSender('create_room', 'sala');
+  String errorMsg = "";
+  final TextEditingController _textController = TextEditingController();
+
+  Future<bool> _checkRoomExists(String roomCode) async {
+    var exists = true;
+    final response = await http.get(Uri.parse('http://10.0.0.111:3000/roomExists?roomCode=$roomCode'));
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      exists = jsonResponse['result'];
+    } else {
+      throw Exception('Failed to check room code');
+    }
+    return exists;
+  }
+
+  void connectToServer(BuildContext context) async {
+    var exists = await _checkRoomExists(_textController.text);
+    if(exists){
+      setState(() {
+        errorMsg = "This room already exists!";
+      });
+    }else{
+      SocketService.instance.initializeSocketConnection();
+      SocketService.instance.webSocketSender('enter_room', _textController.text);
+      Navigator.push(
+        context,
+         MaterialPageRoute(builder: (context) => ChooseBookPage(roomCode: _textController.text, userType: UserType.creator)),
+      );
+      SocketService.instance.initializeSocketConnection();
+      SocketService.instance.webSocketSender('create_room', _textController.text);
+    }
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
   }
 
   @override
@@ -40,6 +75,7 @@ class _ChooseChapterScreenState extends State<SharePage> {
             ),
             SizedBox(height: 10),
             TextField(
+              controller: _textController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Type here',
@@ -47,16 +83,23 @@ class _ChooseChapterScreenState extends State<SharePage> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () => {
                 //Adicione aqui a lógica para criar a sala
-                connectToServer();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ChooseBookPage(code: 'sala')),
-                );
+                connectToServer(context),
               },
               child: Text('Create'),
             ),
+            SizedBox(height: 20),
+            if(errorMsg != "")...{
+              Text(
+                errorMsg,
+                style: TextStyle(
+                  color: Color.fromARGB(255, 173, 35, 35),
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            }
           ],
         ),
       ),

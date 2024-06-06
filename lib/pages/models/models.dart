@@ -23,6 +23,12 @@ class Versiculo {
   }
 }
 
+enum UserType{
+  creator,
+  follower,
+  offline
+}
+
 // class Reference {
 //   String sender;
 //   String roomCode;

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/choose_book/choose_book.dart';
 import 'package:flutter_application/pages/colors/colors.dart';
 import 'package:flutter_application/pages/follow/follow.dart';
+import 'package:flutter_application/pages/models/models.dart';
 import 'package:flutter_application/pages/share/share.dart';
 
 class HomePage extends StatelessWidget {
@@ -112,7 +113,7 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ChooseBookPage(code: '')),
+                      MaterialPageRoute(builder: (context) => ChooseBookPage(roomCode: '', userType: UserType.offline)),
                     );
                   },
                   child: Text(
