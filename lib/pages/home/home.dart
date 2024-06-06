@@ -22,20 +22,20 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 250),
-    );
+    // _animationController = AnimationController(
+    //   vsync: this,
+    //   duration: Duration(milliseconds: 250),
+    // );
 
-    _whiteButtonAnimation = Tween<Offset>(
-      begin: Offset(0, 2),
-      end: Offset(0, 0),
-    ).animate(_animationController);
+    // _whiteButtonAnimation = Tween<Offset>(
+    //   begin: Offset(0, 2),
+    //   end: Offset(0, 0),
+    // ).animate(_animationController);
 
-    _blackButtonAnimation = Tween<Offset>(
-      begin: Offset(0, 1),
-      end: Offset(0, 0),
-    ).animate(_animationController);
+    // _blackButtonAnimation = Tween<Offset>(
+    //   begin: Offset(0, 1),
+    //   end: Offset(0, 0),
+    // ).animate(_animationController);
   }
 
   @override
@@ -46,26 +46,27 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   void _toggle() {
     setState(() {
-      _isExpanded = !_isExpanded;
-      if (_isExpanded) {
-        _animationController.forward();
-      } else {
-        _animationController.reverse();
-      }
+      // _isExpanded = !_isExpanded;
+      // if (_isExpanded) {
+      //   _animationController.forward();
+      // } else {
+      //   _animationController.reverse();
+      // }
+      ActualTheme.actualTheme.white =  !ActualTheme.actualTheme.white;
     });
   }
 
-  void _updateWhite() {
-    setState(() {
-      ActualTheme.actualTheme.white = true;
-    });
-  }
+  // void _updateWhite() {
+  //   setState(() {
+  //     ActualTheme.actualTheme.white = true;
+  //   });
+  // }
 
-  void _updateDark() {
-    setState(() {
-      ActualTheme.actualTheme.white = false;
-    });
-  }
+  // void _updateDark() {
+  //   setState(() {
+  //     ActualTheme.actualTheme.white = false;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -203,25 +204,33 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                SlideTransition(
-                  position: _whiteButtonAnimation,
-                  child: FloatingActionButton(
-                    onPressed: _updateWhite,
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.circle, color: Colors.black),
-                  ),
-                ),
-                SlideTransition(
-                  position: _blackButtonAnimation,
-                  child: FloatingActionButton(
-                    onPressed: _updateDark,
-                    backgroundColor: Colors.black,
-                    child: Icon(Icons.circle, color: Colors.white),
-                  ),
-                ),
-                FloatingActionButton(
+                // SlideTransition(
+                //   position: _whiteButtonAnimation,
+                //   child: FloatingActionButton.small(
+                //     elevation: 0.0,
+                //     onPressed: _updateWhite,
+                //     backgroundColor: Colors.white,
+                //     child: Icon(Icons.circle, color: Colors.black),
+                //   ),
+                // ),
+                // SlideTransition(
+                //   position: _blackButtonAnimation,
+                //   child: FloatingActionButton.small(
+                //     elevation: 0.0,
+                //     onPressed: _updateDark,
+                //     backgroundColor: Colors.black,
+                //     child: Icon(Icons.circle, color: Colors.white),
+                //   ),
+                // ),
+                FloatingActionButton.small(
                   onPressed: _toggle,
-                  child: Icon(Icons.settings),
+                  backgroundColor: ActualTheme.actualTheme.white ?
+                  Color.fromARGB(255, 38, 63, 71) :
+                  Color.fromARGB(255, 236, 236, 236),
+                  child: 
+                      ActualTheme.actualTheme.white ?
+                      Icon(Icons.dark_mode, color: ActualTheme.actualTheme.getPrimary()) :
+                      Icon(Icons.light_mode, color: ActualTheme.actualTheme.getPrimary())
                 ),
               ],
             ),
