@@ -256,10 +256,6 @@ class _ReadViewState extends State<ReadPage> with ReadController {
   }
 
 
-
-
-
-
   void goPreviousChapter(BuildContext context) {
     if(capitulo > 1){
       capitulo -= 1;
@@ -313,17 +309,42 @@ class _ReadViewState extends State<ReadPage> with ReadController {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('You are leaving!'),
-          content: Text('Would you like to leave the room?'),
+          backgroundColor: ActualTheme.actualTheme.getPrimSmooth(),
+          title: Text(
+            'You are leaving!',
+            style: TextStyle(
+              color: ActualTheme.actualTheme.getTextColor(),
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+          content: Text(
+            'Would you like to leave the room?',
+            style: TextStyle(
+              color: ActualTheme.actualTheme.getTextColor(),
+              fontWeight: FontWeight.normal,
+            ),
+          ),
           actions: <Widget>[
             TextButton(
-              child: Text('No'),
+              child: Text(
+                'No',
+                style: TextStyle(
+                  color: ActualTheme.actualTheme.getTextColor(),
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Yes'),
+              child: Text(
+                'Yes',
+                style: TextStyle(
+                  color: ActualTheme.actualTheme.getTextColor(),
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
               onPressed: () {
                 SocketService.instance.disconnectFromSocket();
                 Navigator.of(context).pop();
