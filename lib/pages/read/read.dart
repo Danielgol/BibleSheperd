@@ -210,21 +210,21 @@ class _ReadViewState extends State<ReadPage> with ReadController {
                     },
                   ),
 
-
                   if (widget.userType != UserType.follower)...{
                     Positioned(
                       bottom: 20, // Distância do botão ao fundo da tela
                       left: 20, // Distância do botão à esquerda da tela
                       child: ElevatedButton(
                         onPressed: () {
-                          // Adicione ação desejada
                           goPreviousChapter(context);
                         },
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color.fromARGB(255, 52, 69, 84)
-                        )),
-                        child: Icon(Icons.arrow_back, color: Colors.white),
+                        style: ElevatedButton.styleFrom(
+                          elevation: 5.0,
+                          shape: CircleBorder(),
+                          padding: EdgeInsets.all(24),
+                          backgroundColor: ActualTheme.actualTheme.getTernary()
+                        ),
+                        child: Icon(Icons.arrow_back, color: ActualTheme.actualTheme.getTextColor()),
                       ),
                     ),
 
@@ -233,16 +233,18 @@ class _ReadViewState extends State<ReadPage> with ReadController {
                       right: 20, // Distância do botão à direita da tela
                       child: ElevatedButton(
                         onPressed: () {
-                          // Adicione ação desejada
                           goNextChapter(context);
                         },
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color.fromARGB(255, 52, 69, 84)
-                        )),
-                        child: Icon(Icons.arrow_forward, color: Colors.white),
-                      ),
+                        style: ElevatedButton.styleFrom(
+                          elevation: 5.0,
+                          shape: CircleBorder(),
+                          padding: EdgeInsets.all(24),
+                          backgroundColor: ActualTheme.actualTheme.getTernary()
+                        ),
+                        child: Icon(Icons.arrow_forward, color: ActualTheme.actualTheme.getTextColor()),
+                      ),   
                     ),
+
                   }
                 ],
               );
@@ -339,10 +341,30 @@ class _ReadViewState extends State<ReadPage> with ReadController {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Text('This room was closed!'),
+          backgroundColor: ActualTheme.actualTheme.getPrimSmooth(),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'The room was closed!',
+                style: TextStyle(
+                  color: ActualTheme.actualTheme.getTextColor(),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ]
+          ),
           actions: <Widget>[
             TextButton(
-              child: Text('Ok'),
+              child: Text(
+                'Ok',
+                style: TextStyle(
+                  color: ActualTheme.actualTheme.getTextColor(),
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
