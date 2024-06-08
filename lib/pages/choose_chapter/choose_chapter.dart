@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/colors/colors.dart';
+import 'package:flutter_application/pages/popups/popups.dart';
 import 'package:flutter_application/pages/read/read.dart';
 import 'package:flutter_application/pages/models/models.dart';
 import 'package:flutter_application/pages/socket_service/socket_service.dart';
@@ -44,7 +45,7 @@ class ChooseChapterPage extends StatelessWidget {
                   ),
                   onPressed: () => {
                     // botão X
-                    _showConfirmationDialog(context)
+                    ShowDialogs.showConfirmationDialog(context)
                   },
                   label: Text(
                     roomCode,
@@ -116,59 +117,59 @@ class ChooseChapterPage extends StatelessWidget {
     );
   }
 
-  void _showConfirmationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: ActualTheme.actualTheme.getPrimSmooth(),
-          title: Text(
-            'You are leaving!',
-            style: TextStyle(
-              color: ActualTheme.actualTheme.getTextColor(),
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-          content: Text(
-            'Would you like to leave the room?',
-            style: TextStyle(
-              color: ActualTheme.actualTheme.getTextColor(),
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'No',
-                style: TextStyle(
-                  color: ActualTheme.actualTheme.getTextColor(),
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text(
-                'Yes',
-                style: TextStyle(
-                  color: ActualTheme.actualTheme.getTextColor(),
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onPressed: () {
-                if (userType == UserType.creator){
-                  SocketService.instance.disconnectFromSocket();
-                }
-                Navigator.of(context).pop();
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void _showConfirmationDialog(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         backgroundColor: ActualTheme.actualTheme.getPrimSmooth(),
+  //         title: Text(
+  //           'You are leaving!',
+  //           style: TextStyle(
+  //             color: ActualTheme.actualTheme.getTextColor(),
+  //             fontWeight: FontWeight.normal,
+  //           ),
+  //         ),
+  //         content: Text(
+  //           'Would you like to leave the room?',
+  //           style: TextStyle(
+  //             color: ActualTheme.actualTheme.getTextColor(),
+  //             fontWeight: FontWeight.normal,
+  //           ),
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: Text(
+  //               'No',
+  //               style: TextStyle(
+  //                 color: ActualTheme.actualTheme.getTextColor(),
+  //                 fontWeight: FontWeight.normal,
+  //               ),
+  //             ),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //           TextButton(
+  //             child: Text(
+  //               'Yes',
+  //               style: TextStyle(
+  //                 color: ActualTheme.actualTheme.getTextColor(),
+  //                 fontWeight: FontWeight.normal,
+  //               ),
+  //             ),
+  //             onPressed: () {
+  //               if (userType == UserType.creator){
+  //                 SocketService.instance.disconnectFromSocket();
+  //               }
+  //               Navigator.of(context).pop();
+  //               Navigator.of(context).popUntil((route) => route.isFirst);
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
 }

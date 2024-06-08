@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/colors/colors.dart';
 import 'package:flutter_application/pages/models/models.dart';
+import 'package:flutter_application/pages/popups/popups.dart';
 import 'package:flutter_application/pages/read/read_controller.dart';
 import 'package:flutter_application/pages/socket_service/socket_service.dart';
 
@@ -43,7 +44,7 @@ class _ReadViewState extends State<ReadPage> with ReadController {
           SocketService.instance.disconnectFromSocket();
           Navigator.of(context).pop();
           Navigator.of(context).popUntil((route) => route.isFirst);
-          return _showRoomClosedDialog(context);
+          return ShowDialogs.showRoomClosedDialog(context);
         });
       });
     }
@@ -59,7 +60,7 @@ class _ReadViewState extends State<ReadPage> with ReadController {
           return;
         }
         if(widget.userType == UserType.follower){
-          _showConfirmationDialog(context);
+          ShowDialogs.showConfirmationDialog(context);
           return;
         }
         Navigator.of(context).pop();
@@ -103,7 +104,7 @@ class _ReadViewState extends State<ReadPage> with ReadController {
                   ),
                   onPressed: () => {
                     // botão X
-                    _showConfirmationDialog(context)
+                    ShowDialogs.showConfirmationDialog(context)
                   },
                   label: Text(
                     widget.roomCode,
@@ -221,7 +222,7 @@ class _ReadViewState extends State<ReadPage> with ReadController {
                         style: ElevatedButton.styleFrom(
                           elevation: 5.0,
                           shape: CircleBorder(),
-                          padding: EdgeInsets.all(24),
+                          padding: EdgeInsets.all(16),
                           backgroundColor: ActualTheme.actualTheme.getTernary()
                         ),
                         child: Icon(Icons.arrow_back, color: ActualTheme.actualTheme.getTextColor()),
@@ -238,7 +239,7 @@ class _ReadViewState extends State<ReadPage> with ReadController {
                         style: ElevatedButton.styleFrom(
                           elevation: 5.0,
                           shape: CircleBorder(),
-                          padding: EdgeInsets.all(24),
+                          padding: EdgeInsets.all(16),
                           backgroundColor: ActualTheme.actualTheme.getTernary()
                         ),
                         child: Icon(Icons.arrow_forward, color: ActualTheme.actualTheme.getTextColor()),
@@ -304,95 +305,56 @@ class _ReadViewState extends State<ReadPage> with ReadController {
     }
   }
 
-  void _showConfirmationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: ActualTheme.actualTheme.getPrimSmooth(),
-          title: Text(
-            'You are leaving!',
-            style: TextStyle(
-              color: ActualTheme.actualTheme.getTextColor(),
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-          content: Text(
-            'Would you like to leave the room?',
-            style: TextStyle(
-              color: ActualTheme.actualTheme.getTextColor(),
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'No',
-                style: TextStyle(
-                  color: ActualTheme.actualTheme.getTextColor(),
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text(
-                'Yes',
-                style: TextStyle(
-                  color: ActualTheme.actualTheme.getTextColor(),
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onPressed: () {
-                SocketService.instance.disconnectFromSocket();
-                Navigator.of(context).pop();
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showRoomClosedDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: ActualTheme.actualTheme.getPrimSmooth(),
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'The room was closed!',
-                style: TextStyle(
-                  color: ActualTheme.actualTheme.getTextColor(),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ]
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'Ok',
-                style: TextStyle(
-                  color: ActualTheme.actualTheme.getTextColor(),
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void _showConfirmationDialog(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         backgroundColor: ActualTheme.actualTheme.getPrimSmooth(),
+  //         title: Text(
+  //           'You are leaving!',
+  //           style: TextStyle(
+  //             color: ActualTheme.actualTheme.getTextColor(),
+  //             fontWeight: FontWeight.normal,
+  //           ),
+  //         ),
+  //         content: Text(
+  //           'Would you like to leave the room?',
+  //           style: TextStyle(
+  //             color: ActualTheme.actualTheme.getTextColor(),
+  //             fontWeight: FontWeight.normal,
+  //           ),
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: Text(
+  //               'No',
+  //               style: TextStyle(
+  //                 color: ActualTheme.actualTheme.getTextColor(),
+  //                 fontWeight: FontWeight.normal,
+  //               ),
+  //             ),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //           TextButton(
+  //             child: Text(
+  //               'Yes',
+  //               style: TextStyle(
+  //                 color: ActualTheme.actualTheme.getTextColor(),
+  //                 fontWeight: FontWeight.normal,
+  //               ),
+  //             ),
+  //             onPressed: () {
+  //               SocketService.instance.disconnectFromSocket();
+  //               Navigator.of(context).pop();
+  //               Navigator.of(context).popUntil((route) => route.isFirst);
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }
